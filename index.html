@@ -207,13 +207,14 @@ button:focus-visible, .timer-display:focus-visible{
   outline-offset:2px;
 }
 body.is-fullscreen{
-  background:var(--panel-black);
+  background:#000;
 }
 body.is-fullscreen .app-shell{
   max-width:100vw;
   height:100vh;
   justify-content:center;
   gap:28px;
+  background:#000;
 }
 body.is-fullscreen .brand img{
   width:min(200px,40vw);
@@ -222,7 +223,7 @@ body.is-fullscreen .controls{display:none;}
 body.is-fullscreen .timer-stage{
   box-shadow:none;
   border-radius:0;
-  background:var(--panel-black);
+  background:transparent;
   padding:0;
 }
 body.is-fullscreen .timer-display{font-size:clamp(6rem,26vw,16rem);}
