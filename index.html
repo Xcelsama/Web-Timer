@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -101,7 +102,7 @@ body{
 }
 @keyframes pop{
   0%,100%{transform:scale(1);}
-  50%{transform:scale(1.15);}
+  50%{transform:scale(1.05);}
 }
 .fullscreen-btn{
   position:absolute;
@@ -282,7 +283,7 @@ body.is-fullscreen .timer-stage{
   width:100%;
   justify-content:center;
 }
-body.is-fullscreen .timer-display{font-size:clamp(6rem,30vw,20rem);}
+body.is-fullscreen .timer-display{font-size:clamp(5rem,22vw,15rem);}
 body.is-fullscreen .clock-strip{color:var(--white); opacity:0.6;}
 body.is-fullscreen .controls{display:none;}
 body.is-fullscreen.show-controls .controls{
@@ -393,12 +394,32 @@ function formatTime(totalSeconds){
   return neg ? '-' + base : base;
 }
 
+let lastDisplayLength = 0;
+
+function fitTimerText(){
+  const el = timerDisplay;
+  timerDisplay.style.fontSize = '';
+  const maxWidth = timerStage.clientWidth * 0.86;
+  let size = parseFloat(getComputedStyle(el).fontSize);
+  let guard = 0;
+  while(el.scrollWidth > maxWidth && size > 32 && guard < 40){
+    size -= 2;
+    el.style.fontSize = size + 'px';
+    guard++;
+  }
+}
+
 function updateDisplay(){
-  timerDisplay.textContent = formatTime(remainingSeconds);
+  const text = formatTime(remainingSeconds);
+  timerDisplay.textContent = text;
   const overtime = remainingSeconds < 0;
   timerStage.classList.toggle('low', !overtime && remainingSeconds <= 60 && remainingSeconds > 10);
   timerStage.classList.toggle('critical', !overtime && remainingSeconds <= 10 && remainingSeconds > 0);
   timerStage.classList.toggle('overtime', overtime);
+  if(text.length !== lastDisplayLength){
+    lastDisplayLength = text.length;
+    fitTimerText();
+  }
 }
 
 function tick(){
@@ -563,7 +584,9 @@ document.addEventListener('fullscreenchange', () => {
   const isFs = !!document.fullscreenElement;
   document.body.classList.toggle('is-fullscreen', isFs);
   if(!isFs) document.body.classList.remove('show-controls');
+  requestAnimationFrame(fitTimerText);
 });
+window.addEventListener('resize', () => { requestAnimationFrame(fitTimerText); });
 
 const brand = document.querySelector('.brand');
 brand.addEventListener('click', () => {
@@ -593,3 +616,4 @@ updateDisplay();
 </script>
 </body>
 </html>
+ 
