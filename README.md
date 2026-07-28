@@ -1,4 +1,4 @@
-# Salvation Ministries — Youth Convention Timer
+# Salvation Ministries Youth Convention Timer
 
 ![Salvation Ministries](img.jpg)
 
